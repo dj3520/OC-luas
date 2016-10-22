@@ -7,7 +7,7 @@ local react = component.br_reactor
 local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
 
 while true do
-  perc = reactor.getEnergyStored() / 100000 -- Max is actually 10,000,000 but convert to percent!
+  perc = react.getEnergyStored() / 100000 -- Max is actually 10,000,000 but convert to percent!
   if perc > ignoreTop then
     react.setActive(false)
     react.setAllControlRodLevels(100)
