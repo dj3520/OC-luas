@@ -1,18 +1,19 @@
 -- Runs a BigReactors reactor based on how full it's internal battery is.
 
-component = require("component")
-event = require("event")
-shell = require("shell")
-computer = require("computer")
-args, opts = shell.parse(...)
-react = component.br_reactor
-running = true
-perc = 0
+local component = require("component")
+local event = require("event")
+local shell = require("shell")
+local computer = require("computer")
+local args, opts = shell.parse(...)
+local react = component.br_reactor
+local running = true
+local perc = 0
 
 -- Config settings. Feel free to change!
-ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
+local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
 
 function doloop()
+local function doloop()
   perc = react.getEnergyStored() / 100000 -- Max is actually 10,000,000 but convert to percent!
   if perc > ignoreTop and running then
     react.setActive(false)
