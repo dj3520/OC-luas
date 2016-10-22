@@ -1,7 +1,7 @@
 -- Runs a BigReactors reactor based on how full it's internal battery is.
 
 local component = require("component")
-local reactor = component.br_reactor
+local react = component.br_reactor
 
 -- Config settings. Feel free to change!
 local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
@@ -15,5 +15,4 @@ while true do
     react.setActive(true)
     react.setAllControlRodLevels(perc)
   end
-  if debug == true then print("Reactor percent: "..perc) end
 end
