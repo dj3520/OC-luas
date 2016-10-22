@@ -12,33 +12,30 @@ local perc = 0
 -- Config settings. Feel free to change!
 local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
 
-function doloop()
 local function doloop()
   perc = react.getEnergyStored() / 100000 -- Max is actually 10,000,000 but convert to percent!
   if perc > ignoreTop and running then
     react.setActive(false)
     react.setAllControlRodLevels(100)
+    event.timer(1, doloop)
   elseif running then
     react.setActive(true)
     react.setAllControlRodLevels(perc)
+    event.timer(1, doloop)
   else react.setActive(false) end
-  os.sleep(1)
-  computer.pushSignal("simpleReactorService")
 end
 
-if args[1] == "start" then
+function start()
   print("Simple reactor control service running.")
-  event.listen("simpleReactorService", doloop)
   running = true
   doloop()
 end
 
-if args[1] == "stop" then
+function stop()
   print("Simple reactor control service stopping.")
-  event.ignore("simpleReactorService", doloop)
   running = false
 end
 
-if args[1] == "perc" then
+function perc()
   print("Percent: "..perc)
 end
