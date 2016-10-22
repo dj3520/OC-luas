@@ -21,6 +21,14 @@ local function reactAI()
   if debug == true then print("Reactor percent: "..perc) end
 end
 
+-- DUH MAIN DO STUFF THING --
+local function doloop()
+  if running == true then 
+    reactorAI()
+    event.timer(1, doloop)
+  end
+end
+
 function stop()
   print("Simple reactor control service stopping.")
   running = false
