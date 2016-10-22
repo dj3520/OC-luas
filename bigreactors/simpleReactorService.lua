@@ -5,6 +5,8 @@ local term = require("term")
 local event = require("event")
 local reactor = component.br_reactor
 
+local debug = false
+
 -- Config settings. Feel free to change!
 local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
 
@@ -18,6 +20,7 @@ local function reactAI()
     react.setActive(true)
     react.setAllControlRodLevels(perc)
   end
+  if debug == true then print("Reactor percent: "..perc) end
 end
 
 local function doloop()
@@ -37,4 +40,8 @@ function start()
   running = true
   print("Simple reactor control service running.")
   event.timer(1, doloop)
+end
+
+function debug(setting)
+  debug = setting
 end
