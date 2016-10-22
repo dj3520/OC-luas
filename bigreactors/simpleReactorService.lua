@@ -2,6 +2,7 @@
 
 local component = require("component")
 local term = require("term")
+local event = require("event")
 local reactor = component.br_reactor
 
 -- Config settings. Feel free to change!
