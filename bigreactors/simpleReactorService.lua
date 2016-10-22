@@ -1,46 +1,43 @@
 -- Runs a BigReactors reactor based on how full it's internal battery is.
 
-local component = require("component")
-local event = require("event")
-local react = component.br_reactor
-
-local debug = false
+component = require("component")
+event = require("event")
+shell = require("shell")
+computer = require("computer")
+args, opts = shell.parse(...)
+react = component.br_reactor
+running = true
+perc = 0
 
 -- Config settings. Feel free to change!
-local ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
+ignoreTop = 90 -- At this level, reactor will shut down and stay off until levels drop again
 
-local function reactAI()
+function doloop()
   perc = react.getEnergyStored() / 100000 -- Max is actually 10,000,000 but convert to percent!
-  if perc > ignoreTop then
+  if perc > ignoreTop and running then
     react.setActive(false)
     react.setAllControlRodLevels(100)
-  else
+  elseif running then
     react.setActive(true)
     react.setAllControlRodLevels(perc)
-  end
-  if debug == true then print("Reactor percent: "..perc) end
+  else react.setActive(false) end
+  os.sleep(1)
+  computer.pushSignal("simpleReactorService")
 end
 
--- DUH MAIN DO STUFF THING --
-local function doloop()
-  if running == true then 
-    reactorAI()
-    event.timer(1, doloop)
-  end
-end
-
-function stop()
-  print("Simple reactor control service stopping.")
-  running = false
-  reactor.setActive(false)
-end
-
-function start()
-  running = true
+if args[1] == "start" then
   print("Simple reactor control service running.")
-  event.timer(1, doloop)
+  event.listen("simpleReactorService", doloop)
+  running = true
+  doloop()
 end
 
-function debug(setting)
-  debug = setting
+if args[1] == "stop" then
+  print("Simple reactor control service stopping.")
+  event.ignore("simpleReactorService", doloop)
+  running = false
+end
+
+if args[1] == "perc" then
+  print("Percent: "..perc)
 end
