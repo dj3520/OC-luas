@@ -4,7 +4,6 @@ local component = require("component")
 local event = require("event")
 local shell = require("shell")
 local computer = require("computer")
-local args, opts = shell.parse(...)
 local react = component.br_reactor
 local running = true
 local perc = 0
